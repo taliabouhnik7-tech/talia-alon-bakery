@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Live-theme design tokens — defaults (design spec).
+   These are the fallback; the runtime injector (ThemeStyle) overrides
+   any that have been changed in the admin theme editor. */
+:root {
+  --c-bg: #FAF7F2;
+  --c-text: #43302E;
+  --c-text2: #66594D;
+  --c-btn: #D2E2EB;
+  --c-btn-text: #43302E;
+  --c-border: #D2E2EB;
+
+  --fs-product-name: 14px;
+  --fs-description: 12px;
+  --fs-price: 15px;
+  --fs-heading: 24px;
+  --fs-label: 10px;
+
+  --fw-product-name: 600;
+  --fw-description: 400;
+  --fw-price: 700;
+  --fw-heading: 700;
+  --fw-label: 600;
+
+  --r-card: 16px;
+  --r-button: 26px;
+  --r-input: 8px;
+  --r-pill: 36px;
+}
+
+html,
+body {
+  background: #F7EEE6;
+  color: #43302E;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-assistant), system-ui, sans-serif;
+  line-height: 1.5; /* comfortable default for Hebrew body text */
+}
+
+/* ---- Type scale ----
+   Themeable semantic roles (size + weight from the live theme editor) plus
+   two fixed body roles. Line-heights: ~1.5 for reading text, tighter for
+   display/price so large text isn't over-spaced. */
+.t-product-name { font-size: var(--fs-product-name); font-weight: var(--fw-product-name); line-height: 1.4; }
+.t-description  { font-size: var(--fs-description);  font-weight: var(--fw-description);  line-height: 1.5; }
+.t-price        { font-size: var(--fs-price);        font-weight: var(--fw-price);        line-height: 1.3; }
+.t-heading      { font-size: var(--fs-heading);      font-weight: var(--fw-heading);      line-height: 1.25; }
+.t-label        { font-size: var(--fs-label);        font-weight: var(--fw-label);        line-height: 1.4; }
+.t-body         { font-size: 14px; line-height: 1.5; }
+.t-caption      { font-size: 12px; line-height: 1.5; }
+
+/* Fluid app shell — fills the viewport at every width (content is centered
+   with per-section max-widths, not a single fixed box). */
+.app-shell {
+  width: 100%;
+  background: var(--c-bg);
+  min-height: 100dvh;
+}
+
+/* Vertical stripes decoration for the logo header (per Figma) */
+.stripes-bg {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #EBDA9A 0px,
+    #EBDA9A 49.78px,
+    #F7EEE6 49.78px,
+    #F7EEE6 99.56px
+  );
+}
+
+/* Visible focus ring for accessibility (keyboard-visible, theme-colored) */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--c-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Add-to-cart feedback — cart icon bump. Only animates when the user has
+   not requested reduced motion. */
+@keyframes cart-bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.28); }
+  55% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cart-bump { animation: cart-bump 0.4s ease; }
+}
+
+/* Hide number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
