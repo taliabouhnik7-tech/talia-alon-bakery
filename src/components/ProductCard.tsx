@@ -36,16 +36,20 @@ export function ProductCard({ product, categoryName }: Props) {
     // Mobile: horizontal row (image left, text right, per RTL).
     // Desktop (lg+): vertical card (image on top) — flex-col-reverse flips the
     // DOM [text, image] so the image sits above the text.
-    <article className="bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card overflow-hidden flex min-h-32 h-full lg:flex-col-reverse lg:min-h-0">
+    <article className="bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card overflow-hidden flex min-h-32 h-full lg:flex-col-reverse lg:min-h-0 lg:transition lg:duration-200 lg:hover:-translate-y-1 lg:hover:shadow-lg">
       {/* Text side */}
       <div className="flex-1 p-3 flex flex-col items-end justify-between min-w-0">
         <div className="w-full min-w-0">
           {/* Title row: name first (rightmost in RTL), category label after it */}
           <div className="flex items-center justify-start gap-2">
-            <h2 className="font-heb t-product-name text-themeText truncate text-right">
+            <h3 className="font-heb t-product-name text-themeText truncate text-right">
               {product.name}
-            </h2>
-            <span className="inline-block bg-sand t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0">
+            </h3>
+            <span
+              className={`inline-block ${
+                categoryName === "חלבי" ? "bg-sandLight" : "bg-sand"
+              } t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0`}
+            >
               {categoryName}
             </span>
           </div>
@@ -66,13 +70,13 @@ export function ProductCard({ product, categoryName }: Props) {
           )}
         </div>
 
-        {/* Action row — button/counter aligned to the right */}
-        <div className="flex items-center justify-start w-full pt-2">
+        {/* Action row — button/counter fill the content column */}
+        <div className="flex items-center w-full pt-2">
           {qty === 0 ? (
             <button
               type="button"
               onClick={onAdd}
-              className="inline-flex items-center min-h-11 px-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[12px] leading-4 rounded-pill transition hover:brightness-95 active:brightness-90"
+              className="flex w-full items-center justify-center min-h-11 px-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[13px] leading-4 rounded-pill transition hover:brightness-95 active:brightness-90 active:scale-95"
               aria-label={`הוסף לסל: ${product.name}`}
             >
               + הוסף לסל

@@ -76,8 +76,8 @@ export function CategoriesEditor({ initial }: { initial: Category[] }) {
         </p>
       )}
 
-      <div className="border rounded-lg overflow-hidden bg-white">
-        <table className="w-full text-sm">
+      <div className="border rounded-lg overflow-x-auto bg-white">
+        <table className="w-full min-w-[480px] text-sm">
           <thead className="bg-gray-50 text-right">
             <tr>
               <th className="p-3">שם</th>

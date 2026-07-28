@@ -1,40 +1,44 @@
 "use client";
 
-import type { Category } from "@/lib/types";
+type Tab = { slug: string; name: string };
 
 type Props = {
-  categories: Category[];
+  tabs: Tab[];
   activeSlug: string;
   onSelect: (slug: string) => void;
 };
 
-export function CategoryTabs({ categories, activeSlug, onSelect }: Props) {
+export function CategoryTabs({ tabs, activeSlug, onSelect }: Props) {
   return (
     <nav
-      className="sticky z-20 bg-themeBtn py-2"
+      className="sticky z-20 bg-themeBtn py-2 lg:bg-themeBg lg:border-b lg:border-themeBorder"
       style={{ top: 52 }}
       aria-label="קטגוריות"
     >
       <div
-        className="mx-auto w-full max-w-6xl px-4 grid lg:max-w-md"
-        style={{ gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))` }}
         role="tablist"
+        className="no-scrollbar mx-auto w-full max-w-6xl px-4 lg:px-8 flex gap-2 overflow-x-auto lg:overflow-visible lg:justify-start lg:gap-3"
       >
-        {categories.map((c) => {
-          const active = c.slug === activeSlug;
+        {tabs.map((t) => {
+          const active = t.slug === activeSlug;
           return (
             <button
-              key={c.id}
+              key={t.slug}
               role="tab"
               aria-selected={active}
-              onClick={() => onSelect(c.slug)}
-              className={`
-                h-11 flex items-center justify-center font-heb font-semibold text-[14px] leading-5
-                transition text-themeText
-                ${active ? "bg-themeBg rounded-pill" : "bg-themeBtn border-b-[1.6px] border-transparent hover:brightness-95 active:brightness-90"}
-              `}
+              onClick={() => onSelect(t.slug)}
+              className={[
+                "shrink-0 whitespace-nowrap font-heb font-semibold rounded-pill transition text-themeText",
+                "text-[14px] px-4 py-2 lg:text-[16px] lg:px-5",
+                active
+                  ? // mobile: cream pill on the blue bar · desktop: filled blue pill (add-to-cart style).
+                    // matching border keeps the box the same size as the outline (inactive) pills.
+                    "bg-themeBg lg:bg-themeBtn lg:text-themeBtnText lg:border lg:border-themeBtn"
+                  : // mobile: flat · desktop: outline pill with hover
+                    "hover:brightness-95 lg:bg-transparent lg:border lg:border-themeBorder lg:hover:brightness-100 lg:hover:bg-themeBg",
+              ].join(" ")}
             >
-              {c.name}
+              {t.name}
             </button>
           );
         })}

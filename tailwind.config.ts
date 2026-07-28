@@ -11,6 +11,7 @@ const config: Config = {
         surface: "#FFFFFF",
         skyblue: "#D2E2EB",
         sand: "#EBDA9A",
+        sandLight: "#EFE2AE",
         // Text
         ink: "#43302E",
         inkHead: "#33261A",

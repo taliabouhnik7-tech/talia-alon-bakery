@@ -22,8 +22,8 @@ export default async function AdminLayout({
     <div className="min-h-screen bg-white text-gray-900" dir="rtl">
       {isLoggedIn && (
         <header className="border-b bg-gray-50">
-          <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
-            <nav className="flex gap-4 text-sm">
+          <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 p-4 flex-wrap">
+            <nav className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
               <Link href="/admin" className="hover:underline">
                 דשבורד
               </Link>

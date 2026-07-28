@@ -40,6 +40,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+
 body {
   font-family: var(--font-assistant), system-ui, sans-serif;
   line-height: 1.5; /* comfortable default for Hebrew body text */
@@ -57,6 +58,19 @@ body {
 .t-body         { font-size: 14px; line-height: 1.5; }
 .t-caption      { font-size: 12px; line-height: 1.5; }
 
+/* Desktop type scale (≥1024px only) — larger, more confident sizing for a wide
+   layout. Sizes derive from the theme tokens (so the live editor still drives
+   them proportionally); weights and colors stay fully token-driven. */
+@media (min-width: 1024px) {
+  .t-product-name { font-size: calc(var(--fs-product-name) + 4px); }
+  .t-description  { font-size: calc(var(--fs-description) + 2px); }
+  .t-price        { font-size: calc(var(--fs-price) + 5px); }
+  .t-heading      { font-size: calc(var(--fs-heading) + 10px); }
+  .t-label        { font-size: calc(var(--fs-label) + 1px); }
+  .t-body         { font-size: 16px; }
+  .t-caption      { font-size: 13px; }
+}
+
 /* Fluid app shell — fills the viewport at every width (content is centered
    with per-section max-widths, not a single fixed box). */
 .app-shell {
@@ -65,16 +79,25 @@ body {
   min-height: 100dvh;
 }
 
-/* Vertical stripes decoration for the logo header (per Figma) */
+/* Vertical stripes for the logo header — exactly 7 equal stripes on EVERY
+   screen width (each = 100%/7). Strong yellow (#EBDA9A) alternates with a
+   paler yellow (#EFE2AE); with 7 stripes the first and last are both strong. */
 .stripes-bg {
-  background-image: repeating-linear-gradient(
+  background-image: linear-gradient(
     90deg,
-    #EBDA9A 0px,
-    #EBDA9A 49.78px,
-    #F7EEE6 49.78px,
-    #F7EEE6 99.56px
+    #EBDA9A 0 14.2857%,
+    #EFE2AE 14.2857% 28.5714%,
+    #EBDA9A 28.5714% 42.8571%,
+    #EFE2AE 42.8571% 57.1429%,
+    #EBDA9A 57.1429% 71.4286%,
+    #EFE2AE 71.4286% 85.7143%,
+    #EBDA9A 85.7143% 100%
   );
 }
+
+/* Hide the scrollbar on the horizontally-scrollable mobile category row. */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
 
 /* Visible focus ring for accessibility (keyboard-visible, theme-colored) */
 :where(button, a, input, textarea, select):focus-visible {
@@ -83,16 +106,28 @@ body {
   border-radius: 4px;
 }
 
-/* Add-to-cart feedback — cart icon bump. Only animates when the user has
-   not requested reduced motion. */
+/* Add-to-cart feedback. All gated behind prefers-reduced-motion. */
 @keyframes cart-bump {
   0% { transform: scale(1); }
-  30% { transform: scale(1.28); }
-  55% { transform: scale(0.9); }
+  25% { transform: scale(1.4) rotate(-6deg); }
+  45% { transform: scale(0.85) rotate(4deg); }
+  65% { transform: scale(1.15) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes badge-pop {
+  0% { transform: scale(0.3); }
+  60% { transform: scale(1.35); }
   100% { transform: scale(1); }
 }
+@keyframes counter-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 @media (prefers-reduced-motion: no-preference) {
-  .cart-bump { animation: cart-bump 0.4s ease; }
+  .cart-bump { animation: cart-bump 0.5s ease; }
+  .badge-pop { animation: badge-pop 0.4s ease; }
+  .counter-pop { animation: counter-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); }
 }
 
 /* Hide number input spinners */

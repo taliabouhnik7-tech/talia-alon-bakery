@@ -53,8 +53,9 @@ export function TopBar() {
             <img src="/icons/cart.svg" alt="" aria-hidden="true" width={18} height={18} className="block" />
             {totalCount > 0 && (
               <span
+                key={totalCount}
                 aria-hidden="true"
-                className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-themeBg text-themeText text-[10px] leading-none font-bold flex items-center justify-center font-heb drop-shadow-[0px_1px_1px_rgba(0,0,0,0.1)]"
+                className="badge-pop absolute -top-2 -right-2 w-4 h-4 rounded-full bg-themeBg text-themeText text-[10px] leading-none font-bold flex items-center justify-center font-heb drop-shadow-[0px_1px_1px_rgba(0,0,0,0.1)]"
               >
                 {totalCount}
               </span>

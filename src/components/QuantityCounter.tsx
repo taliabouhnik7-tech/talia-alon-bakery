@@ -10,7 +10,7 @@ type Props = {
 export function QuantityCounter({ value, onDecrement, onIncrement, label = "כמות" }: Props) {
   return (
     <div
-      className="inline-flex items-center bg-themeBtn rounded-full h-11"
+      className="counter-pop flex w-full items-center justify-between bg-themeBtn rounded-full h-11"
       role="group"
       aria-label={label}
     >
@@ -28,7 +28,7 @@ export function QuantityCounter({ value, onDecrement, onIncrement, label = "כמ
       </button>
       <span
         aria-live="polite"
-        className="w-8 text-center font-heb font-bold text-[14px] leading-5 text-themeBtnText"
+        className="flex-1 text-center font-heb font-bold text-[14px] leading-5 text-themeBtnText"
       >
         {value}
       </span>
