@@ -24,6 +24,9 @@ const fredoka = Fredoka({
 export const metadata: Metadata = {
   title: "טליה אלון — מאפייה ביתית",
   description: "עוגות ועוגיות ביתיות בהזמנה אישית מטליה אלון",
+  verification: {
+    google: "ZEjbA8-aOiLjOTpJ4ZKKs5vfWrKUznMJ38mQ9_1C3ko",
+  },
 };
 
 export const viewport: Viewport = {
