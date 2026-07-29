@@ -32,7 +32,7 @@ export function TopBar() {
 
   return (
     <header className="sticky top-0 z-30 bg-themeBtn border-b border-themeBorder h-[52px]">
-      <div className="mx-auto w-full max-w-6xl h-full flex items-center justify-between px-4">
+      <div className="mx-auto w-full max-w-6xl h-full flex items-center justify-between px-4 lg:px-8">
         {/* Logo on the RIGHT (RTL start) */}
         <Link
           href="/"

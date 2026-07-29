@@ -47,7 +47,7 @@ export function ProductCard({ product, categoryName }: Props) {
             </h3>
             <span
               className={`inline-block ${
-                categoryName === "חלבי" ? "bg-sandLight" : "bg-sand"
+                categoryName === "חלבי" ? "bg-beige" : "bg-sand"
               } t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0`}
             >
               {categoryName}

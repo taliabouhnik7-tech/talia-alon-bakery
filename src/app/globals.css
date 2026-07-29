@@ -81,16 +81,16 @@ body {
 
 /* Vertical stripes for the logo header — exactly 7 equal stripes on EVERY
    screen width (each = 100%/7). Strong yellow (#EBDA9A) alternates with a
-   paler yellow (#EFE2AE); with 7 stripes the first and last are both strong. */
+   cream (#F7EEE6); with 7 stripes the first and last are both strong. */
 .stripes-bg {
   background-image: linear-gradient(
     90deg,
     #EBDA9A 0 14.2857%,
-    #EFE2AE 14.2857% 28.5714%,
+    #F7EEE6 14.2857% 28.5714%,
     #EBDA9A 28.5714% 42.8571%,
-    #EFE2AE 42.8571% 57.1429%,
+    #F7EEE6 42.8571% 57.1429%,
     #EBDA9A 57.1429% 71.4286%,
-    #EFE2AE 71.4286% 85.7143%,
+    #F7EEE6 71.4286% 85.7143%,
     #EBDA9A 85.7143% 100%
   );
 }

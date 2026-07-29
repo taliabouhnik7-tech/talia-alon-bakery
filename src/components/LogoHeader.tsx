@@ -29,7 +29,7 @@ export function LogoHeader() {
 
   return (
     <section
-      className="relative bg-surface stripes-bg flex flex-col items-center justify-center overflow-hidden h-[200px] lg:h-[340px]"
+      className="relative bg-surface stripes-bg flex flex-col items-center justify-center overflow-hidden h-[200px] lg:h-[440px]"
       aria-label="לוגו"
     >
       <h1

@@ -11,7 +11,7 @@ type Props = {
 export function CategoryTabs({ tabs, activeSlug, onSelect }: Props) {
   return (
     <nav
-      className="sticky z-20 bg-themeBtn py-2 lg:bg-themeBg lg:border-b lg:border-themeBorder"
+      className="sticky z-20 bg-themeBtn py-2"
       style={{ top: 52 }}
       aria-label="קטגוריות"
     >
@@ -30,12 +30,9 @@ export function CategoryTabs({ tabs, activeSlug, onSelect }: Props) {
               className={[
                 "shrink-0 whitespace-nowrap font-heb font-semibold rounded-pill transition text-themeText",
                 "text-[14px] px-4 py-2 lg:text-[16px] lg:px-5",
-                active
-                  ? // mobile: cream pill on the blue bar · desktop: filled blue pill (add-to-cart style).
-                    // matching border keeps the box the same size as the outline (inactive) pills.
-                    "bg-themeBg lg:bg-themeBtn lg:text-themeBtnText lg:border lg:border-themeBtn"
-                  : // mobile: flat · desktop: outline pill with hover
-                    "hover:brightness-95 lg:bg-transparent lg:border lg:border-themeBorder lg:hover:brightness-100 lg:hover:bg-themeBg",
+                // Teal bar with a white/cream pill for the active tab, transparent
+                // (hover-highlighted) for the rest — same treatment on all breakpoints.
+                active ? "bg-themeBg" : "hover:bg-themeBg/40",
               ].join(" ")}
             >
               {t.name}

@@ -42,7 +42,7 @@ export function CartContents({
   idPrefix?: string;
   onNavigateAway?: () => void;
 }) {
-  const { items, total, clear } = useCart();
+  const { items, total, clear, increment, decrement, remove } = useCart();
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -109,10 +109,10 @@ export function CartContents({
         ההזמנה נשלחת ישירות בוואטסאפ לטליה
       </p>
 
-      {/* Items list */}
-      <ul className="flex flex-col gap-2">
+      {/* Items list — with inline quantity editing + remove */}
+      <ul className="flex flex-col">
         {empty && (
-          <li className="font-heb t-body text-themeText2 text-right">
+          <li className="font-heb t-body text-themeText2 text-right py-2">
             הסל שלך ריק.{" "}
             <Link href="/" className="underline hover:text-themeText">
               חזרי לתפריט
@@ -120,11 +120,65 @@ export function CartContents({
           </li>
         )}
         {items.map((it) => (
-          <li key={it.productId} className="flex items-baseline justify-between gap-3">
-            <span className="font-heb t-body text-themeText2 text-right">
-              {it.name} ({it.categoryName})
-              {it.packageInfo ? ` — ${it.packageInfo}` : ""} × {it.quantity}
-            </span>
+          <li
+            key={it.productId}
+            className="flex items-start justify-between gap-3 py-3 border-b border-borderDivider last:border-b-0"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="font-heb t-body text-themeText text-right">
+                {it.name} <span className="text-themeText2">({it.categoryName})</span>
+              </p>
+              {it.packageInfo && (
+                <p className="font-heb t-caption text-themeText2 text-right">{it.packageInfo}</p>
+              )}
+              <div className="mt-2 flex items-center gap-3">
+                {/* mini quantity stepper (same design language as the product card) */}
+                <div
+                  className="inline-flex items-center rounded-full bg-themeBtn h-9"
+                  role="group"
+                  aria-label={`כמות: ${it.name}`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => decrement(it.productId)}
+                    aria-label="הפחתת כמות"
+                    className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  >
+                    <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </button>
+                  <span
+                    aria-live="polite"
+                    className="w-7 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
+                  >
+                    {it.quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => increment(it.productId)}
+                    aria-label="הוספת כמות"
+                    className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  >
+                    <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => remove(it.productId)}
+                  aria-label={`הסרת ${it.name} מהסל`}
+                  className="font-heb t-caption text-themeText2 transition hover:text-danger"
+                >
+                  הסרה
+                </button>
+              </div>
+            </div>
             <span className="font-heb t-body font-bold text-themeText shrink-0">
               {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
             </span>
