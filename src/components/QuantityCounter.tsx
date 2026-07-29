@@ -1,5 +1,7 @@
 "use client";
 
+import { TrashIcon } from "./TrashIcon";
+
 type Props = {
   value: number;
   onDecrement: () => void;
@@ -8,27 +10,34 @@ type Props = {
 };
 
 export function QuantityCounter({ value, onDecrement, onIncrement, label = "כמות" }: Props) {
+  // At qty 1 the decrement removes the item, so show a trash icon instead of "−".
+  const removing = value === 1;
+
   return (
     <div
-      className="counter-pop flex w-full items-center justify-between bg-themeBtn rounded-full h-11"
+      className="counter-pop inline-flex items-center bg-themeBtn rounded-full h-11"
       role="group"
       aria-label={label}
     >
       <button
         type="button"
         onClick={onDecrement}
-        aria-label="הפחת כמות"
+        aria-label={removing ? "הסרה מהסל" : "הפחת כמות"}
         className="w-11 h-11 flex items-center justify-center rounded-full text-themeText transition hover:brightness-95 active:brightness-90"
       >
         <span className="w-7 h-7 rounded-full bg-themeBg flex items-center justify-center">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-            <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+          {removing ? (
+            <TrashIcon size={15} />
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          )}
         </span>
       </button>
       <span
         aria-live="polite"
-        className="flex-1 text-center font-heb font-bold text-[14px] leading-5 text-themeBtnText"
+        className="w-8 text-center font-heb font-bold text-[14px] leading-5 text-themeBtnText"
       >
         {value}
       </span>

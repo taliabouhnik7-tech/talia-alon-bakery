@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
+import { TrashIcon } from "./TrashIcon";
 
 function buildWhatsAppMessage(opts: {
   customerName: string;
@@ -120,68 +121,68 @@ export function CartContents({
           </li>
         )}
         {items.map((it) => (
-          <li
-            key={it.productId}
-            className="flex items-start justify-between gap-3 py-3 border-b border-borderDivider last:border-b-0"
-          >
-            <div className="min-w-0 flex-1">
-              <p className="font-heb t-body text-themeText text-right">
+          <li key={it.productId} className="py-3 border-b border-borderDivider last:border-b-0">
+            {/* Top: name + line price */}
+            <div className="flex items-start justify-between gap-3">
+              <p className="font-heb t-body text-themeText text-right min-w-0">
                 {it.name} <span className="text-themeText2">({it.categoryName})</span>
+                {it.packageInfo && (
+                  <span className="block font-heb t-caption text-themeText2">{it.packageInfo}</span>
+                )}
               </p>
-              {it.packageInfo && (
-                <p className="font-heb t-caption text-themeText2 text-right">{it.packageInfo}</p>
-              )}
-              <div className="mt-2 flex items-center gap-3">
-                {/* mini quantity stepper (same design language as the product card) */}
-                <div
-                  className="inline-flex items-center rounded-full bg-themeBtn h-9"
-                  role="group"
-                  aria-label={`כמות: ${it.name}`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => decrement(it.productId)}
-                    aria-label="הפחתת כמות"
-                    className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
-                  >
-                    <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
-                        <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                  </button>
-                  <span
-                    aria-live="polite"
-                    className="w-7 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
-                  >
-                    {it.quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => increment(it.productId)}
-                    aria-label="הוספת כמות"
-                    className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
-                  >
-                    <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
-                        <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
+              <span className="font-heb t-body font-bold text-themeText shrink-0">
+                {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
+              </span>
+            </div>
+
+            {/* Bottom: quantity stepper (right) — trash pinned to the far edge (left) */}
+            <div className="mt-2 flex items-center justify-between gap-3">
+              <div
+                className="inline-flex items-center rounded-full bg-themeBtn h-9"
+                role="group"
+                aria-label={`כמות: ${it.name}`}
+              >
                 <button
                   type="button"
-                  onClick={() => remove(it.productId)}
-                  aria-label={`הסרת ${it.name} מהסל`}
-                  className="font-heb t-caption text-themeText2 transition hover:text-danger"
+                  onClick={() => decrement(it.productId)}
+                  aria-label="הפחתת כמות"
+                  className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
                 >
-                  הסרה
+                  <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                </button>
+                <span
+                  aria-live="polite"
+                  className="w-7 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
+                >
+                  {it.quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => increment(it.productId)}
+                  aria-label="הוספת כמות"
+                  className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                >
+                  <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
                 </button>
               </div>
+
+              <button
+                type="button"
+                onClick={() => remove(it.productId)}
+                aria-label={`הסרת ${it.name} מהעגלה`}
+                className="shrink-0 w-9 h-9 inline-flex items-center justify-center rounded-full text-themeText2 transition hover:text-danger hover:bg-danger/10"
+              >
+                <TrashIcon size={18} />
+              </button>
             </div>
-            <span className="font-heb t-body font-bold text-themeText shrink-0">
-              {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
-            </span>
           </li>
         ))}
       </ul>
