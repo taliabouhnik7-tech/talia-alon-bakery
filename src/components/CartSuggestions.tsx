@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useCart } from "@/lib/cart";
 import { kashrutLabel, formatPrice } from "@/lib/format";
+import { ProductThumb } from "./ProductThumb";
 import type { Product } from "@/lib/types";
 
 /**
@@ -62,8 +63,8 @@ export function CartSuggestions() {
   if (suggestions.length === 0) return null;
 
   return (
-    <section className="rounded-card bg-sand/20 p-3" aria-label="הצעות להוספה">
-      <p className="font-heb font-semibold t-body text-themeText text-right mb-2">
+    <section className="border-t border-borderDivider pt-4" aria-label="הצעות להוספה">
+      <p className="font-heb font-semibold t-body text-themeText text-right mb-3">
         אולי תרצי להוסיף גם...
       </p>
       <ul className="flex flex-col gap-2">
@@ -71,9 +72,13 @@ export function CartSuggestions() {
           const cat = cats.get(p.category_id);
           const label = kashrutLabel(cat?.slug, cat?.name ?? "");
           return (
-            <li key={p.id} className="flex items-center justify-between gap-3">
-              <div className="min-w-0 text-right">
-                <p className="font-heb t-body text-themeText truncate">{p.name}</p>
+            <li
+              key={p.id}
+              className="flex items-center gap-3 bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card p-2"
+            >
+              <ProductThumb src={p.image_url} alt={p.name} size={48} />
+              <div className="min-w-0 flex-1 text-right">
+                <p className="font-heb t-product-name text-themeText truncate">{p.name}</p>
                 {p.price != null && (
                   <p className="font-heb t-caption text-themeText2">{formatPrice(p.price)}</p>
                 )}
@@ -87,6 +92,7 @@ export function CartSuggestions() {
                     categoryName: label,
                     packageInfo: p.package_info,
                     price: p.price ?? null,
+                    imageUrl: p.image_url ?? null,
                   })
                 }
                 aria-label={`הוספת ${p.name} לעגלה`}

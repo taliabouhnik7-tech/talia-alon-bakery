@@ -22,6 +22,7 @@ export function ProductCard({ product, categoryName }: Props) {
       categoryName,
       packageInfo: product.package_info,
       price: product.price ?? null,
+      imageUrl: product.image_url ?? null,
     });
     // fire-and-forget analytics
     fetch("/api/track-add", {

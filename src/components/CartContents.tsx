@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
 import { TrashIcon } from "./TrashIcon";
 import { CartSuggestions } from "./CartSuggestions";
+import { ProductThumb } from "./ProductThumb";
 
 function buildWhatsAppMessage(opts: {
   customerName: string;
@@ -148,14 +149,17 @@ export function CartContents({
       <ul className="flex flex-col">
         {items.map((it) => (
           <li key={it.productId} className="py-3 border-b border-borderDivider last:border-b-0">
-            {/* Top: name + line price */}
+            {/* Top: thumbnail + name (right) · line price (left) */}
             <div className="flex items-start justify-between gap-3">
-              <p className="font-heb t-body text-themeText text-right min-w-0">
-                {it.name} <span className="text-themeText2">({it.categoryName})</span>
-                {it.packageInfo && (
-                  <span className="block font-heb t-caption text-themeText2">{it.packageInfo}</span>
-                )}
-              </p>
+              <div className="flex items-start gap-2 min-w-0">
+                <ProductThumb src={it.imageUrl} alt={it.name} size={52} />
+                <p className="font-heb t-body text-themeText text-right min-w-0">
+                  {it.name} <span className="text-themeText2">({it.categoryName})</span>
+                  {it.packageInfo && (
+                    <span className="block font-heb t-caption text-themeText2">{it.packageInfo}</span>
+                  )}
+                </p>
+              </div>
               <span className="font-heb t-body font-bold text-themeText shrink-0">
                 {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
               </span>
@@ -204,7 +208,7 @@ export function CartContents({
                 type="button"
                 onClick={() => remove(it.productId)}
                 aria-label={`הסרת ${it.name} מהעגלה`}
-                className="shrink-0 w-9 h-9 inline-flex items-center justify-center text-themeText2 transition-colors hover:text-danger"
+                className="shrink-0 w-9 h-9 inline-flex items-center justify-end text-themeText2 transition-colors hover:text-danger"
               >
                 <TrashIcon size={18} />
               </button>
