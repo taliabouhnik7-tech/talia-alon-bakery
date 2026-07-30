@@ -68,7 +68,7 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="drawer-scroll flex-1 overflow-y-auto px-4 py-4">
           <CartContents idPrefix="cart-drawer" onNavigateAway={closeDrawer} />
         </div>
       </div>

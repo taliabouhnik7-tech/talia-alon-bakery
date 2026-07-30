@@ -145,30 +145,27 @@ export function CartContents({
         ההזמנה נשלחת ישירות בוואטסאפ לטליה
       </p>
 
-      {/* Items list — with inline quantity editing + remove */}
+      {/* Items list — one compact row per item (thumbnail · details · controls) */}
       <ul className="flex flex-col">
         {items.map((it) => (
-          <li key={it.productId} className="py-3 border-b border-borderDivider last:border-b-0">
-            {/* Top: thumbnail + name (right) · line price (left) */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2 min-w-0">
-                <ProductThumb src={it.imageUrl} alt={it.name} size={52} />
-                <p className="font-heb t-body text-themeText text-right min-w-0">
-                  {it.name} <span className="text-themeText2">({it.categoryName})</span>
-                  {it.packageInfo && (
-                    <span className="block font-heb t-caption text-themeText2">{it.packageInfo}</span>
-                  )}
-                </p>
-              </div>
-              <span className="font-heb t-body font-bold text-themeText shrink-0">
+          <li key={it.productId} className="flex items-center gap-3 py-3">
+            <ProductThumb src={it.imageUrl} alt={it.name} size={52} />
+
+            <div className="min-w-0 flex-1 text-right">
+              <p className="font-heb t-body text-themeText truncate">
+                {it.name} <span className="text-themeText2">({it.categoryName})</span>
+              </p>
+              {it.packageInfo && (
+                <p className="font-heb t-caption text-themeText2 truncate">{it.packageInfo}</p>
+              )}
+              <p className="font-heb t-body font-bold text-themeText">
                 {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
-              </span>
+              </p>
             </div>
 
-            {/* Bottom: quantity stepper (right) — trash pinned to the far edge (left) */}
-            <div className="mt-2 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1 shrink-0">
               <div
-                className="inline-flex items-center rounded-full bg-themeBtn h-9"
+                className="inline-flex items-center rounded-full bg-themeBtn h-8"
                 role="group"
                 aria-label={`כמות: ${it.name}`}
               >
@@ -176,17 +173,17 @@ export function CartContents({
                   type="button"
                   onClick={() => decrement(it.productId)}
                   aria-label="הפחתת כמות"
-                  className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
                 >
-                  <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                  <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
+                    <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
                       <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </span>
                 </button>
                 <span
                   aria-live="polite"
-                  className="w-7 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
+                  className="w-6 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
                 >
                   {it.quantity}
                 </span>
@@ -194,10 +191,10 @@ export function CartContents({
                   type="button"
                   onClick={() => increment(it.productId)}
                   aria-label="הוספת כמות"
-                  className="w-9 h-9 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
                 >
-                  <span className="w-6 h-6 rounded-full bg-themeBg flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+                  <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
+                    <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
                       <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </span>
@@ -208,7 +205,7 @@ export function CartContents({
                 type="button"
                 onClick={() => remove(it.productId)}
                 aria-label={`הסרת ${it.name} מהעגלה`}
-                className="shrink-0 w-9 h-9 inline-flex items-center justify-end text-themeText2 transition-colors hover:text-danger"
+                className="w-8 h-8 inline-flex items-center justify-center text-themeText2 transition-colors hover:text-danger"
               >
                 <TrashIcon size={18} />
               </button>
