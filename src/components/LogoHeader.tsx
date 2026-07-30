@@ -13,7 +13,8 @@ export function LogoHeader() {
     let raf = 0;
     const update = () => {
       raf = 0;
-      const o = Math.max(0, 1 - window.scrollY / 120);
+      // Fade gradually over a longer scroll distance (was 120px — too abrupt).
+      const o = Math.max(0, 1 - window.scrollY / 280);
       el.style.opacity = String(o);
     };
     const onScroll = () => {
