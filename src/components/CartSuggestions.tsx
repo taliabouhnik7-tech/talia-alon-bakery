@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useCart } from "@/lib/cart";
-import { kashrutLabel, formatPrice } from "@/lib/format";
-import { ProductThumb } from "./ProductThumb";
+import { kashrutLabel } from "@/lib/format";
+import { ProductCard } from "./ProductCard";
 import type { Product } from "@/lib/types";
 
 /**
@@ -30,7 +30,7 @@ function pickSuggestions(
 }
 
 export function CartSuggestions() {
-  const { items, addItem } = useCart();
+  const { items } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [cats, setCats] = useState<Map<string, { slug: string; name: string }>>(new Map());
 
@@ -67,43 +67,20 @@ export function CartSuggestions() {
       <p className="font-heb font-semibold t-body text-themeText text-right mb-3">
         אולי תרצי להוסיף גם...
       </p>
-      <ul className="flex flex-col gap-2">
+      {/* Same ProductCard as the home page, arranged 2-up and in compact layout. */}
+      <div className="grid grid-cols-2 gap-3">
         {suggestions.map((p) => {
           const cat = cats.get(p.category_id);
-          const label = kashrutLabel(cat?.slug, cat?.name ?? "");
           return (
-            <li
+            <ProductCard
               key={p.id}
-              className="flex items-center gap-3 bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card p-2"
-            >
-              <ProductThumb src={p.image_url} alt={p.name} size={48} />
-              <div className="min-w-0 flex-1 text-right">
-                <p className="font-heb t-product-name text-themeText truncate">{p.name}</p>
-                {p.price != null && (
-                  <p className="font-heb t-caption text-themeText2">{formatPrice(p.price)}</p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() =>
-                  addItem({
-                    productId: p.id,
-                    name: p.name,
-                    categoryName: label,
-                    packageInfo: p.package_info,
-                    price: p.price ?? null,
-                    imageUrl: p.image_url ?? null,
-                  })
-                }
-                aria-label={`הוספת ${p.name} לעגלה`}
-                className="shrink-0 min-h-9 px-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[13px] leading-4 rounded-pill transition hover:brightness-95 active:brightness-90 active:scale-95"
-              >
-                + הוספה
-              </button>
-            </li>
+              product={p}
+              categoryName={kashrutLabel(cat?.slug, cat?.name ?? "")}
+              compact
+            />
           );
         })}
-      </ul>
+      </div>
     </section>
   );
 }

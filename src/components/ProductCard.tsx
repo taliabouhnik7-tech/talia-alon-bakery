@@ -9,9 +9,12 @@ import { formatPrice } from "@/lib/format";
 type Props = {
   product: Product;
   categoryName: string;
+  // compact = always the vertical (image-on-top) layout, for narrow grid cells
+  // (e.g. the 2-col recommendations grid in the cart drawer).
+  compact?: boolean;
 };
 
-export function ProductCard({ product, categoryName }: Props) {
+export function ProductCard({ product, categoryName, compact = false }: Props) {
   const cart = useCart();
   const qty = cart.getQuantity(product.id);
 
@@ -37,7 +40,13 @@ export function ProductCard({ product, categoryName }: Props) {
     // Mobile: horizontal row (image left, text right, per RTL).
     // Desktop (lg+): vertical card (image on top) — flex-col-reverse flips the
     // DOM [text, image] so the image sits above the text.
-    <article className="bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card overflow-hidden flex min-h-32 h-full lg:flex-col-reverse lg:min-h-0 lg:transition lg:duration-200 lg:hover:-translate-y-1 lg:hover:shadow-lg">
+    <article
+      className={
+        compact
+          ? "bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card overflow-hidden flex flex-col-reverse h-full transition duration-200 hover:shadow-lg"
+          : "bg-themeBg border-[0.8px] border-themeBorder rounded-card shadow-card overflow-hidden flex min-h-32 h-full lg:flex-col-reverse lg:min-h-0 lg:transition lg:duration-200 lg:hover:-translate-y-1 lg:hover:shadow-lg"
+      }
+    >
       {/* Text side */}
       <div className="flex-1 p-3 flex flex-col items-end justify-between min-w-0">
         <div className="w-full min-w-0">
@@ -93,14 +102,20 @@ export function ProductCard({ product, categoryName }: Props) {
         </div>
       </div>
 
-      {/* Image — left on mobile, top on desktop */}
-      <div className="relative shrink-0 w-28 self-stretch lg:w-full lg:h-44">
+      {/* Image — left on mobile, top on desktop (always on top when compact) */}
+      <div
+        className={
+          compact
+            ? "relative shrink-0 w-full h-28"
+            : "relative shrink-0 w-28 self-stretch lg:w-full lg:h-44"
+        }
+      >
         {product.image_url ? (
           <Image
             src={product.image_url}
             alt={product.name}
             fill
-            sizes="(min-width: 1024px) 360px, 112px"
+            sizes={compact ? "220px" : "(min-width: 1024px) 360px, 112px"}
             className="object-cover"
           />
         ) : (

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
 import { TrashIcon } from "./TrashIcon";
 import { CartSuggestions } from "./CartSuggestions";
-import { ProductThumb } from "./ProductThumb";
 
 function buildWhatsAppMessage(opts: {
   customerName: string;
@@ -145,85 +145,83 @@ export function CartContents({
         ההזמנה נשלחת ישירות בוואטסאפ לטליה
       </p>
 
-      {/* Items list — one compact row per item (thumbnail · details · controls) */}
-      <ul className="flex flex-col">
+      {/* Items — full-height image + two lines (name/trash · price/stepper) */}
+      <ul className="flex flex-col gap-3">
         {items.map((it) => (
-          <li key={it.productId} className="flex items-center gap-3 py-3">
-            <ProductThumb src={it.imageUrl} alt={it.name} size={52} />
-
-            <div className="min-w-0 flex-1 text-right">
-              <p className="font-heb t-body text-themeText truncate">
-                {it.name} <span className="text-themeText2">({it.categoryName})</span>
-              </p>
-              {it.packageInfo && (
-                <p className="font-heb t-caption text-themeText2 truncate">{it.packageInfo}</p>
+          <li key={it.productId} className="flex items-stretch gap-3">
+            <div className="relative shrink-0 w-16 self-stretch overflow-hidden rounded-lg bg-sand/30">
+              {it.imageUrl ? (
+                <Image src={it.imageUrl} alt={it.name} fill sizes="64px" className="object-cover" />
+              ) : (
+                <span className="absolute inset-0 flex items-center justify-center text-[9px] text-themeText2 font-heb">
+                  תמונה
+                </span>
               )}
-              <p className="font-heb t-body font-bold text-themeText">
-                {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
-              </p>
             </div>
 
-            <div className="flex items-center gap-1 shrink-0">
-              <div
-                className="inline-flex items-center rounded-full bg-themeBtn h-8"
-                role="group"
-                aria-label={`כמות: ${it.name}`}
-              >
+            <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
+              {/* Top line: name (right) · trash (left) */}
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-heb t-body text-themeText truncate min-w-0">
+                  {it.name} <span className="text-themeText2">({it.categoryName})</span>
+                </p>
                 <button
                   type="button"
-                  onClick={() => decrement(it.productId)}
-                  aria-label="הפחתת כמות"
-                  className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  onClick={() => remove(it.productId)}
+                  aria-label={`הסרת ${it.name} מהעגלה`}
+                  className="shrink-0 w-8 h-8 inline-flex items-center justify-center text-themeText2 transition-colors hover:text-danger"
                 >
-                  <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
-                    <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
-                      <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                </button>
-                <span
-                  aria-live="polite"
-                  className="w-6 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
-                >
-                  {it.quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => increment(it.productId)}
-                  aria-label="הוספת כמות"
-                  className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
-                >
-                  <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
-                    <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
-                      <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </span>
+                  <TrashIcon size={18} />
                 </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => remove(it.productId)}
-                aria-label={`הסרת ${it.name} מהעגלה`}
-                className="w-8 h-8 inline-flex items-center justify-center text-themeText2 transition-colors hover:text-danger"
-              >
-                <TrashIcon size={18} />
-              </button>
+              {/* Bottom line: price (right) · stepper (left) */}
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-heb t-body font-bold text-themeText">
+                  {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
+                </p>
+                <div
+                  className="inline-flex items-center rounded-full bg-themeBtn h-8 shrink-0"
+                  role="group"
+                  aria-label={`כמות: ${it.name}`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => decrement(it.productId)}
+                    aria-label="הפחתת כמות"
+                    className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  >
+                    <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
+                      <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </button>
+                  <span
+                    aria-live="polite"
+                    className="w-6 text-center font-heb font-bold text-[13px] leading-none text-themeBtnText"
+                  >
+                    {it.quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => increment(it.productId)}
+                    aria-label="הוספת כמות"
+                    className="w-8 h-8 flex items-center justify-center text-themeText transition hover:brightness-95 active:brightness-90"
+                  >
+                    <span className="w-5 h-5 rounded-full bg-themeBg flex items-center justify-center">
+                      <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
           </li>
         ))}
       </ul>
 
-      {!empty && <hr className="border-0 border-t border-borderDivider" />}
-
-      <div className="flex items-baseline justify-between">
-        <span className="font-heb font-bold text-themeText text-[18px] leading-6">סה״כ</span>
-        <span className="font-heb font-bold text-themeText text-[18px] leading-6">
-          {formatPrice(total)}
-        </span>
-      </div>
-
-      {/* Its own labeled, warm-toned section — clearly not part of the order above */}
       <CartSuggestions />
 
       <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>
@@ -272,13 +270,15 @@ export function CartContents({
           </p>
         )}
 
-        <div className="flex justify-center">
+        {/* Sticky footer: submit button with the total shown inside it (left). */}
+        <div className="sticky bottom-0 -mx-4 mt-1 border-t border-borderDivider bg-themeBg px-4 pt-3 pb-4">
           <button
             type="submit"
             disabled={submitting || empty}
-            className="min-h-11 px-6 py-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[16px] rounded-wa transition hover:brightness-95 active:brightness-90 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100"
+            className="w-full min-h-11 flex items-center justify-between gap-3 px-6 py-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[16px] rounded-wa transition hover:brightness-95 active:brightness-90 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
-            {submitting ? "שולחת..." : "שליחת ההזמנה בוואטסאפ"}
+            <span>{submitting ? "שולחת..." : "שליחת ההזמנה בוואטסאפ"}</span>
+            <span>{formatPrice(total)}</span>
           </button>
         </div>
       </form>
