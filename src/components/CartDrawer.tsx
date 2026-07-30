@@ -48,7 +48,7 @@ export function CartDrawer() {
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-themeBorder">
+        <div className="shrink-0 flex items-center justify-between gap-2 px-4 py-3">
           <h2 className="font-heb t-heading text-themeText">סיכום הזמנה</h2>
           <button
             ref={closeRef}
@@ -68,9 +68,7 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <div className="drawer-scroll flex-1 overflow-y-auto px-4 pt-4">
-          <CartContents idPrefix="cart-drawer" onNavigateAway={closeDrawer} />
-        </div>
+        <CartContents idPrefix="cart-drawer" onNavigateAway={closeDrawer} />
       </div>
     </div>
   );

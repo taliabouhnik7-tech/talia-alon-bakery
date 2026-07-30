@@ -63,7 +63,7 @@ export function CartSuggestions() {
   if (suggestions.length === 0) return null;
 
   return (
-    <section className="border-t border-borderDivider pt-4" aria-label="הצעות להוספה">
+    <section aria-label="הצעות להוספה">
       <p className="font-heb font-semibold t-body text-themeText text-right mb-3">
         אולי תרצי להוסיף גם...
       </p>

@@ -27,10 +27,12 @@ function BackButton() {
 
 export function CartClient() {
   return (
-    <main className="bg-themeBg min-h-[100dvh] flex flex-col">
-      <div className="mx-auto w-full max-w-lg flex flex-col gap-4 px-4 pt-8 pb-6">
-        <BackButton />
-        <h1 className="font-heb t-heading text-themeText text-right">סיכום הזמנה</h1>
+    <main className="bg-themeBg h-[100dvh] flex flex-col">
+      <div className="mx-auto w-full max-w-lg flex flex-1 min-h-0 flex-col">
+        <div className="px-4 pt-6">
+          <BackButton />
+          <h1 className="mt-1 font-heb t-heading text-themeText text-right">סיכום הזמנה</h1>
+        </div>
         <CartContents idPrefix="cart-page" />
       </div>
     </main>
