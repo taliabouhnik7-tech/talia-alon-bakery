@@ -65,7 +65,7 @@ function IconLink({ href, label, children }: { href: string; label: string; chil
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex items-center justify-center w-11 h-11 rounded-full text-themeText transition hover:brightness-95 active:brightness-90"
+      className="inline-flex items-center justify-center w-11 h-11 rounded-full text-footerText transition hover:brightness-95 active:brightness-90"
     >
       {children}
     </a>
@@ -75,13 +75,13 @@ function IconLink({ href, label, children }: { href: string; label: string; chil
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-themeBtn text-themeText" aria-label="כותרת תחתונה">
+    <footer className="bg-footerBg text-footerText" aria-label="כותרת תחתונה">
       <div className="mx-auto w-full max-w-6xl px-4 py-8 flex flex-col items-center gap-5 text-center lg:flex-row lg:items-start lg:justify-between lg:text-right lg:gap-8">
         {/* Business info */}
         <div className="flex flex-col gap-1">
           <p className="font-logo text-[22px] leading-none">טליה אלון</p>
           <p className="t-caption">מאפייה ביתית</p>
-          <p className="t-caption text-themeText2 mt-1 max-w-xs mx-auto lg:mx-0">
+          <p className="t-caption text-footerText opacity-70 mt-1 max-w-xs mx-auto lg:mx-0">
             איסוף עצמי: ששת הימים 19, חדרה · שישי 10:00–18:00
           </p>
         </div>
@@ -111,7 +111,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-black/10">
-        <p className="mx-auto w-full max-w-6xl px-4 py-3 t-caption text-themeText2 text-center">
+        <p className="mx-auto w-full max-w-6xl px-4 py-3 t-caption text-footerText opacity-70 text-center">
           © {year} טליה אלון · כל הזכויות שמורות
         </p>
       </div>

@@ -34,6 +34,7 @@ export const THEME_TOKENS: ThemeToken[] = [
   // Category badge backgrounds (the chip color shown on product cards / cart).
   { key: "color.badgeParve", cssVar: "--c-badge-parve", label: "תווית קטגוריה — פרווה", group: "colors", default: "#EBDA9A" },
   { key: "color.badgeDairy", cssVar: "--c-badge-dairy", label: "תווית קטגוריה — חלבי", group: "colors", default: "#F7EEE6" },
+  { key: "color.badgeText", cssVar: "--c-badge-text", label: "תווית קטגוריה — טקסט", group: "colors", default: "#43302E" },
   // Add-to-cart control on product images: the idle "+" circle, and the
   // collapsed "count only" circle (shown once an item is in the cart).
   { key: "color.addIdleBg", cssVar: "--c-add-idle-bg", label: "כפתור הוספה — רקע", group: "colors", default: "#F7EEE6" },
@@ -49,6 +50,12 @@ export const THEME_TOKENS: ThemeToken[] = [
   { key: "color.countText", cssVar: "--c-count-text", label: "עיגול כמות (עגלה) — מספר", group: "colors", default: "#43302E" },
   // Shared: the top-bar cart badge background AND the active category tab pill.
   { key: "color.accentPill", cssVar: "--c-accent-pill", label: "רקע תג עגלה וטאב פעיל", group: "colors", default: "#FAF7F2" },
+  // WhatsApp submit button (cart) — background + text.
+  { key: "color.waBtnBg", cssVar: "--c-wa-btn-bg", label: "כפתור וואטסאפ — רקע", group: "colors", default: "#D2E2EB" },
+  { key: "color.waBtnText", cssVar: "--c-wa-btn-text", label: "כפתור וואטסאפ — טקסט", group: "colors", default: "#43302E" },
+  // Footer section — background + text.
+  { key: "color.footerBg", cssVar: "--c-footer-bg", label: "פוטר — רקע", group: "colors", default: "#D2E2EB" },
+  { key: "color.footerText", cssVar: "--c-footer-text", label: "פוטר — טקסט", group: "colors", default: "#43302E" },
 
   // ---- Font sizes (px) ----
   { key: "fontSize.productName", cssVar: "--fs-product-name", label: "שם מוצר", group: "fontSizes", default: "14", unit: "px", min: 10, max: 32, step: 1 },
@@ -169,13 +176,15 @@ export function contrastChecks(values: Record<string, string>): ContrastCheck[] 
     { label: "טקסט ראשי על הרקע", fgKey: "color.textPrimary", bgKey: "color.background" },
     { label: "טקסט משני על הרקע", fgKey: "color.textSecondary", bgKey: "color.background" },
     { label: "טקסט כפתור על רקע הכפתור", fgKey: "color.buttonText", bgKey: "color.buttonBg" },
-    { label: "טקסט על תווית פרווה", fgKey: "color.textPrimary", bgKey: "color.badgeParve" },
-    { label: "טקסט על תווית חלבי", fgKey: "color.textPrimary", bgKey: "color.badgeDairy" },
+    { label: "טקסט על תווית פרווה", fgKey: "color.badgeText", bgKey: "color.badgeParve" },
+    { label: "טקסט על תווית חלבי", fgKey: "color.badgeText", bgKey: "color.badgeDairy" },
     { label: "סמל על כפתור הוספה", fgKey: "color.addIdleIcon", bgKey: "color.addIdleBg" },
     { label: "טקסט על מונה בסל", fgKey: "color.addCountText", bgKey: "color.addCountBg" },
     { label: "סמל על כפתורי +/-", fgKey: "color.addIdleIcon", bgKey: "color.addStepBtn" },
     { label: "טקסט על תג/טאב פעיל", fgKey: "color.textPrimary", bgKey: "color.accentPill" },
     { label: "מספר על עיגול כמות (בריחוף)", fgKey: "color.countText", bgKey: "color.countStroke" },
+    { label: "טקסט על כפתור וואטסאפ", fgKey: "color.waBtnText", bgKey: "color.waBtnBg" },
+    { label: "טקסט על הפוטר", fgKey: "color.footerText", bgKey: "color.footerBg" },
   ];
   return pairs.map((p) => {
     const fg = values[p.fgKey] ?? THEME_DEFAULTS[p.fgKey];

@@ -226,7 +226,7 @@ export function CartContents({
                     <span
                       className={`inline-block ${
                         it.categoryName === "חלבי" ? "bg-badgeDairy" : "bg-badgeParve"
-                      } t-label font-normal text-themeText font-heb rounded-chip px-1.5 py-0 shrink-0 opacity-80`}
+                      } t-label font-normal text-badgeText font-heb rounded-chip px-1.5 py-0 shrink-0 opacity-80`}
                     >
                       {it.categoryName}
                     </span>
@@ -330,7 +330,7 @@ export function CartContents({
         <button
           type="submit"
           disabled={submitting || empty}
-          className="w-full min-h-11 flex items-center justify-between gap-3 px-6 py-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[16px] rounded-wa transition hover:brightness-95 active:brightness-90 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100"
+          className="w-full min-h-11 flex items-center justify-between gap-3 px-6 py-4 bg-waBtnBg text-waBtnText font-heb font-semibold text-[16px] rounded-wa transition hover:brightness-95 active:brightness-90 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100"
         >
           <span>{submitting ? "שולחת..." : "שליחת ההזמנה בוואטסאפ"}</span>
           <span dir="ltr">{formatPriceShekelFirst(total)}</span>

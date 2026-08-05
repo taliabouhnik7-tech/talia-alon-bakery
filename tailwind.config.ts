@@ -31,6 +31,7 @@ const config: Config = {
         themeBorder: "var(--c-border)",
         badgeParve: "var(--c-badge-parve)",
         badgeDairy: "var(--c-badge-dairy)",
+        badgeText: "var(--c-badge-text)",
         addIdleBg: "var(--c-add-idle-bg)",
         addIdleIcon: "var(--c-add-idle-icon)",
         addCountBg: "var(--c-add-count-bg)",
@@ -39,6 +40,10 @@ const config: Config = {
         countStroke: "var(--c-count-stroke)",
         countText: "var(--c-count-text)",
         accentPill: "var(--c-accent-pill)",
+        waBtnBg: "var(--c-wa-btn-bg)",
+        waBtnText: "var(--c-wa-btn-text)",
+        footerBg: "var(--c-footer-bg)",
+        footerText: "var(--c-footer-text)",
       },
       fontFamily: {
         // Logo (Latin display face)

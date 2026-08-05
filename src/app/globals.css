@@ -16,6 +16,7 @@
   --c-stripe-pale: #F7EEE6;
   --c-badge-parve: #EBDA9A;
   --c-badge-dairy: #F7EEE6;
+  --c-badge-text: #43302E;
   --c-add-idle-bg: #F7EEE6;
   --c-add-idle-icon: #43302E;
   --c-add-count-bg: #D2E2EB;
@@ -24,6 +25,10 @@
   --c-count-stroke: #D2E2EB;
   --c-count-text: #43302E;
   --c-accent-pill: #FAF7F2;
+  --c-wa-btn-bg: #D2E2EB;
+  --c-wa-btn-text: #43302E;
+  --c-footer-bg: #D2E2EB;
+  --c-footer-text: #43302E;
 
   --fs-product-name: 14px;
   --fs-description: 12px;

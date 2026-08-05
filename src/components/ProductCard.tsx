@@ -105,7 +105,7 @@ export function ProductCard({ product, categoryName, compact = false }: Props) {
         <span
           className={`absolute top-0 left-0 z-10 ${
             categoryName === "חלבי" ? "bg-badgeDairy" : "bg-badgeParve"
-          } text-themeText font-heb font-semibold text-[13px] lg:text-[14px] leading-none px-3 py-1.5 rounded-tl-card rounded-br-lg shadow-sm`}
+          } text-badgeText font-heb font-semibold text-[13px] lg:text-[14px] leading-none px-3 py-1.5 rounded-tl-card rounded-br-lg shadow-sm`}
         >
           {categoryName}
         </span>
