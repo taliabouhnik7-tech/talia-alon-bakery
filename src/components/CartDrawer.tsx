@@ -33,7 +33,7 @@ export function CartDrawer() {
       {/* Scrim — click outside to close */}
       <div
         onClick={closeDrawer}
-        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 motion-reduce:transition-none ${
+        className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none ${
           drawerOpen ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -68,7 +68,14 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <CartContents idPrefix="cart-drawer" onNavigateAway={closeDrawer} />
+        {/* Remount on each open so quantity controls reset to the collapsed
+            badge, the form starts fresh, and the scroll position returns to the
+            top (CartContents also scrolls itself to top on mount). */}
+        <CartContents
+          key={drawerOpen ? "open" : "closed"}
+          idPrefix="cart-drawer"
+          onNavigateAway={closeDrawer}
+        />
       </div>
     </div>
   );

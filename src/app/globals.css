@@ -12,6 +12,18 @@
   --c-btn: #D2E2EB;
   --c-btn-text: #43302E;
   --c-border: #D2E2EB;
+  --c-stripe-strong: #EBDA9A;
+  --c-stripe-pale: #F7EEE6;
+  --c-badge-parve: #EBDA9A;
+  --c-badge-dairy: #F7EEE6;
+  --c-add-idle-bg: #F7EEE6;
+  --c-add-idle-icon: #43302E;
+  --c-add-count-bg: #D2E2EB;
+  --c-add-count-text: #43302E;
+  --c-add-step-btn: #F7EEE6;
+  --c-count-stroke: #D2E2EB;
+  --c-count-text: #43302E;
+  --c-accent-pill: #FAF7F2;
 
   --fs-product-name: 14px;
   --fs-description: 12px;
@@ -80,18 +92,19 @@ body {
 }
 
 /* Vertical stripes for the logo header — exactly 7 equal stripes on EVERY
-   screen width (each = 100%/7). Strong yellow (#EBDA9A) alternates with a
-   cream (#F7EEE6); with 7 stripes the first and last are both strong. */
+   screen width (each = 100%/7). A strong color alternates with a pale one;
+   with 7 stripes the first and last are both strong. Both colors are live
+   theme tokens (--c-stripe-strong / --c-stripe-pale). */
 .stripes-bg {
   background-image: linear-gradient(
     90deg,
-    #EBDA9A 0 14.2857%,
-    #F7EEE6 14.2857% 28.5714%,
-    #EBDA9A 28.5714% 42.8571%,
-    #F7EEE6 42.8571% 57.1429%,
-    #EBDA9A 57.1429% 71.4286%,
-    #F7EEE6 71.4286% 85.7143%,
-    #EBDA9A 85.7143% 100%
+    var(--c-stripe-strong) 0 14.2857%,
+    var(--c-stripe-pale) 14.2857% 28.5714%,
+    var(--c-stripe-strong) 28.5714% 42.8571%,
+    var(--c-stripe-pale) 42.8571% 57.1429%,
+    var(--c-stripe-strong) 57.1429% 71.4286%,
+    var(--c-stripe-pale) 71.4286% 85.7143%,
+    var(--c-stripe-strong) 85.7143% 100%
   );
 }
 
@@ -99,8 +112,11 @@ body {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-/* Thin, subtle scrollbar for the cart drawer (neutral border color). */
-.drawer-scroll { scrollbar-width: thin; scrollbar-color: #D9D1C7 transparent; }
+/* Thin, subtle scrollbar for the cart drawer (neutral border color).
+   overflow-anchor: none — we compensate scroll manually when the item list
+   grows/shrinks (see CartContents); leaving native scroll-anchoring on made it
+   fight that compensation, causing a jump-down-then-snap-back on +/-. */
+.drawer-scroll { scrollbar-width: thin; scrollbar-color: #D9D1C7 transparent; overflow-anchor: none; }
 .drawer-scroll::-webkit-scrollbar { width: 6px; }
 .drawer-scroll::-webkit-scrollbar-track { background: transparent; }
 .drawer-scroll::-webkit-scrollbar-thumb { background-color: #D9D1C7; border-radius: 9999px; }
@@ -130,10 +146,31 @@ body {
   60% { transform: scale(1.06); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
+/* Idle circle → stepper: a clean width slide (height stays 44px, width grows
+   from the circle to the full pill). No scale/overshoot, so there is no jump at
+   the start or end — a continuous open. Anchored edge (right/left) makes it
+   unfurl in the RTL direction; overflow-hidden reveals the controls as it opens. */
+@keyframes stepper-open {
+  from { width: 44px; }
+  to   { width: 100px; }
+}
+/* Attention pulse for the name field when submit is attempted without it. */
+@keyframes name-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(176, 0, 32, 0.0); }
+  25%  { box-shadow: 0 0 0 4px rgba(176, 0, 32, 0.28); }
+  60%  { box-shadow: 0 0 0 6px rgba(176, 0, 32, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(176, 0, 32, 0.0); }
+}
+/* Border danger applies regardless of motion (static emphasis); the pulsing
+   ring is gated behind reduced-motion below. */
+.name-flash { border-color: #B00020 !important; }
+
 @media (prefers-reduced-motion: no-preference) {
   .cart-bump { animation: cart-bump 0.5s ease; }
   .badge-pop { animation: badge-pop 0.4s ease; }
   .counter-pop { animation: counter-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .stepper-open { animation: stepper-open 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+  .name-flash { animation: name-flash 1.1s ease-out 2; }
 }
 
 /* Hide number input spinners */

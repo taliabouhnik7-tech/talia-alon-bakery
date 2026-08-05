@@ -30,9 +30,9 @@ export function CategoryTabs({ tabs, activeSlug, onSelect }: Props) {
               className={[
                 "shrink-0 whitespace-nowrap font-heb font-semibold rounded-pill transition text-themeText",
                 "text-[14px] px-4 py-2 lg:text-[16px] lg:px-5",
-                // Teal bar with a white/cream pill for the active tab, transparent
+                // Teal bar with a themeable pill for the active tab, transparent
                 // (hover-highlighted) for the rest — same treatment on all breakpoints.
-                active ? "bg-themeBg" : "hover:bg-themeBg/40",
+                active ? "bg-accentPill" : "hover:bg-themeBg/40",
               ].join(" ")}
             >
               {t.name}

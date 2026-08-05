@@ -33,6 +33,10 @@ export function CartSuggestions() {
   const { items } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [cats, setCats] = useState<Map<string, { slug: string; name: string }>>(new Map());
+  // Once we've chosen which products to suggest, we LOCK them for this mount so
+  // that adding one to the cart doesn't drop it from the list — the card stays
+  // in place and its button morphs into the stepper (same as the home page).
+  const [lockedIds, setLockedIds] = useState<string[] | null>(null);
 
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
@@ -54,11 +58,23 @@ export function CartSuggestions() {
   }, []);
 
   const byId = new Map(products.map((p) => [p.id, p]));
-  const cartProductIds = new Set(items.map((i) => i.productId));
-  const cartCategoryIds = new Set(
-    items.map((i) => byId.get(i.productId)?.category_id).filter((v): v is string => !!v)
-  );
-  const suggestions = pickSuggestions(products, cartProductIds, cartCategoryIds);
+
+  // Pick (and lock) the suggestions the first time products are available,
+  // based on the cart's contents at that moment.
+  useEffect(() => {
+    if (lockedIds || products.length === 0) return;
+    const cartProductIds = new Set(items.map((i) => i.productId));
+    const cartCategoryIds = new Set(
+      items.map((i) => byId.get(i.productId)?.category_id).filter((v): v is string => !!v)
+    );
+    const picks = pickSuggestions(products, cartProductIds, cartCategoryIds);
+    if (picks.length > 0) setLockedIds(picks.map((p) => p.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products, lockedIds]);
+
+  const suggestions = (lockedIds ?? [])
+    .map((id) => byId.get(id))
+    .filter((p): p is Product => !!p);
 
   if (suggestions.length === 0) return null;
 

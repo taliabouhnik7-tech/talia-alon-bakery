@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Category, Product } from "@/lib/types";
+import { fetchSiteSettings } from "@/lib/site-settings-server";
 import { HomeClient } from "./HomeClient";
 
 export const revalidate = 60;
@@ -69,11 +70,13 @@ export default async function HomePage() {
     { data: categories, error: catError },
     { data: products, error: prodError },
     { data: orders },
+    siteSettings,
   ] = await Promise.all([
     supabase.from("categories").select("*").order("sort_order"),
     supabase.from("products").select("*").eq("is_available", true).order("sort_order"),
     // Order items power the "most ordered" ranking.
     supabase.from("orders").select("items"),
+    fetchSiteSettings(),
   ]);
 
   const availableProducts = (products ?? []) as Product[];
@@ -117,6 +120,8 @@ export default async function HomePage() {
       products={availableProducts}
       bestsellerIds={bestsellerIds}
       loadError={!!catError || !!prodError}
+      headerImageUrl={siteSettings.headerImageUrl}
+      showInfoStrip={siteSettings.showInfoStrip}
     />
   );
 }

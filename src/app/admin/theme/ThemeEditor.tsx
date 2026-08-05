@@ -101,7 +101,7 @@ export function ThemeEditor({ initialValues, tableMissing }: Props) {
                       <h3 className="font-heb t-product-name text-themeText truncate text-right">
                         עוגיות שוקולד צ׳יפס
                       </h3>
-                      <span className="inline-block bg-sand t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0">
+                      <span className="inline-block bg-badgeParve t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0">
                         פרווה
                       </span>
                     </div>

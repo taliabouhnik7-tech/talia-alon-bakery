@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCart } from "@/lib/cart";
-import { QuantityCounter } from "./QuantityCounter";
+import { AddControl } from "./AddControl";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 
@@ -48,21 +48,12 @@ export function ProductCard({ product, categoryName, compact = false }: Props) {
       }
     >
       {/* Text side */}
-      <div className="flex-1 p-3 flex flex-col items-end justify-between min-w-0">
+      <div className="flex-1 p-3 flex flex-col items-end min-w-0">
         <div className="w-full min-w-0">
-          {/* Title row: name first (rightmost in RTL), category label after it */}
-          <div className="flex items-center justify-start gap-2">
-            <h3 className="font-heb t-product-name text-themeText truncate text-right">
-              {product.name}
-            </h3>
-            <span
-              className={`inline-block ${
-                categoryName === "חלבי" ? "bg-beige" : "bg-sand"
-              } t-label text-themeText font-heb rounded-chip px-1.5 py-0.5 shrink-0`}
-            >
-              {categoryName}
-            </span>
-          </div>
+          {/* Name (the category badge now lives on the image, top-left) */}
+          <h3 className="font-heb t-product-name text-themeText truncate text-right">
+            {product.name}
+          </h3>
           {product.description && (
             <p className="pt-1 font-heb t-description text-themeText2 line-clamp-2 text-right">
               {product.description}
@@ -79,30 +70,10 @@ export function ProductCard({ product, categoryName, compact = false }: Props) {
             </p>
           )}
         </div>
-
-        {/* Action row — button/counter fill the content column */}
-        <div className="flex items-center w-full pt-2">
-          {qty === 0 ? (
-            <button
-              type="button"
-              onClick={onAdd}
-              className="flex w-full items-center justify-center min-h-11 px-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[13px] leading-4 rounded-pill transition hover:brightness-95 active:brightness-90 active:scale-95"
-              aria-label={`הוסף לסל: ${product.name}`}
-            >
-              + הוסף לסל
-            </button>
-          ) : (
-            <QuantityCounter
-              value={qty}
-              onDecrement={() => cart.decrement(product.id)}
-              onIncrement={() => cart.increment(product.id)}
-              label={`כמות: ${product.name}`}
-            />
-          )}
-        </div>
       </div>
 
-      {/* Image — left on mobile, top on desktop (always on top when compact) */}
+      {/* Image — left on mobile, top on desktop (always on top when compact).
+          The add-to-cart control is overlaid on its bottom-right corner. */}
       <div
         className={
           compact
@@ -127,6 +98,28 @@ export function ProductCard({ product, categoryName, compact = false }: Props) {
             תמונה בקרוב
           </div>
         )}
+
+        {/* Category ribbon — top-left corner of the image. Its top-left radius
+            matches the card corner (flows into the curve); bottom-right has a
+            soft smaller radius; the other two corners are square. */}
+        <span
+          className={`absolute top-0 left-0 z-10 ${
+            categoryName === "חלבי" ? "bg-badgeDairy" : "bg-badgeParve"
+          } text-themeText font-heb font-semibold text-[13px] lg:text-[14px] leading-none px-3 py-1.5 rounded-tl-card rounded-br-lg shadow-sm`}
+        >
+          {categoryName}
+        </span>
+
+        {/* Right-anchored so the expanded stepper grows leftward (RTL). */}
+        <div className="absolute bottom-1 right-1 z-10">
+          <AddControl
+            quantity={qty}
+            label={product.name}
+            onAdd={onAdd}
+            onIncrement={() => cart.increment(product.id)}
+            onDecrement={() => cart.decrement(product.id)}
+          />
+        </div>
       </div>
     </article>
   );

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/lib/cart";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, formatPriceShekelFirst } from "@/lib/format";
 import { TrashIcon } from "./TrashIcon";
+import { AddControl } from "./AddControl";
 import { CartSuggestions } from "./CartSuggestions";
 
 function buildWhatsAppMessage(opts: {
@@ -50,10 +51,46 @@ export function CartContents({
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
+  const [nameFlash, setNameFlash] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const itemsUlRef = useRef<HTMLUListElement>(null);
+  const prevUlHeight = useRef<number | null>(null);
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "972586666623";
   const empty = items.length === 0;
+  const itemCount = items.length;
+
+  // Always start scrolled to the top. In the drawer this instance is remounted
+  // on every open (see CartDrawer), so this also guarantees a top position each
+  // time the drawer is reopened, regardless of where it was left.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, []);
+
+  // Scroll anchoring: adding an item grows the item list, which sits ABOVE the
+  // recommendations. If the user is looking at the recommendations, that growth
+  // would push everything down. Compensate scrollTop by exactly how much the
+  // item LIST grew (not the whole content — so a card morphing into a stepper
+  // inside the viewport doesn't cause an over-scroll).
+  const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+  useIsoLayoutEffect(() => {
+    const s = scrollRef.current;
+    const ul = itemsUlRef.current;
+    if (s && ul) {
+      // Compensate for growth (add) AND shrink (decrement-to-zero / remove) so
+      // the recommendations the user is looking at never jump in either direction.
+      // No scrollTop>0 guard: even when the recs are visible with little/no scroll,
+      // growing the list above them would push them down — so always compensate
+      // (clamped at 0). Runs in a layout effect, i.e. before paint, so no flash.
+      if (prevUlHeight.current != null) {
+        const delta = ul.offsetHeight - prevUlHeight.current;
+        if (delta !== 0) s.scrollTop = Math.max(0, s.scrollTop + delta);
+      }
+      prevUlHeight.current = ul.offsetHeight;
+    }
+  }, [itemCount]);
+
   const nameId = `${idPrefix}-name`;
   const notesId = `${idPrefix}-notes`;
 
@@ -64,10 +101,20 @@ export function CartContents({
 
     if (!name.trim()) {
       setNameError("נא להזין שם");
-      // Bring the missing field into view (drawer scrolls internally).
-      const el = document.getElementById(nameId) as HTMLInputElement | null;
-      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-      el?.focus({ preventScroll: true });
+      setNameFlash(false);
+      // Defer (via setTimeout so it runs after the error text renders and grows
+      // the content height) then scroll all the way to the very bottom of the
+      // summary — past the name and notes fields — so the customer sees the
+      // fields to fill in. The name field is focused + pulsed so the missing
+      // detail stays obvious.
+      window.setTimeout(() => {
+        const scroller = scrollRef.current;
+        if (scroller) scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" });
+        const el = document.getElementById(nameId) as HTMLInputElement | null;
+        el?.focus({ preventScroll: true });
+        setNameFlash(true);
+      }, 0);
+      window.setTimeout(() => setNameFlash(false), 2400);
       return;
     }
     if (empty) {
@@ -145,15 +192,20 @@ export function CartContents({
 
   return (
     <form className="flex flex-1 min-h-0 flex-col" onSubmit={onSubmit} noValidate>
-      <div className="drawer-scroll flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-4 flex flex-col gap-5">
+      <div
+        ref={scrollRef}
+        className="drawer-scroll flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-4 flex flex-col gap-5"
+      >
         <p className="font-heb t-body text-themeText2 text-right">
           ההזמנה נשלחת ישירות בוואטסאפ לטליה
         </p>
 
-        {/* Items — full-height image + two lines (name/trash · price/stepper) */}
-        <ul className="flex flex-col gap-5">
+        {/* Items — one calm unit per row. Clear hierarchy: PRICE is the focal
+            point; name is secondary; badge / trash / quantity are quiet details. */}
+        <ul ref={itemsUlRef} className="flex flex-col gap-6">
           {items.map((it) => (
-            <li key={it.productId} className="flex items-stretch gap-3">
+            <li key={it.productId} className="flex items-stretch gap-3 py-1">
+              {/* Image (right in RTL) */}
               <div className="relative shrink-0 w-16 self-stretch overflow-hidden rounded-lg bg-sand/30">
                 {it.imageUrl ? (
                   <Image src={it.imageUrl} alt={it.name} fill sizes="64px" className="object-cover" />
@@ -164,60 +216,59 @@ export function CartContents({
                 )}
               </div>
 
-              <div className="flex-1 min-w-0 flex flex-col justify-center gap-2.5">
-                {/* Top line: name (right) · trash (left) */}
-                <div className="flex items-center justify-between gap-2">
-                  <p className="font-heb t-body text-themeText truncate min-w-0">
-                    {it.name} <span className="text-themeText2">({it.categoryName})</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => remove(it.productId)}
-                    aria-label={`הסרת ${it.name} מהעגלה`}
-                    className="shrink-0 w-7 h-7 inline-flex items-center justify-center text-themeText2 transition-colors hover:text-danger"
-                  >
-                    <TrashIcon size={16} />
-                  </button>
+              {/* Text + price (middle) */}
+              <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <h3 className="font-heb t-body font-medium text-themeText2 truncate min-w-0 text-right">
+                      {it.name}
+                    </h3>
+                    <span
+                      className={`inline-block ${
+                        it.categoryName === "חלבי" ? "bg-badgeDairy" : "bg-badgeParve"
+                      } t-label font-normal text-themeText font-heb rounded-chip px-1.5 py-0 shrink-0 opacity-80`}
+                    >
+                      {it.categoryName}
+                    </span>
+                  </div>
+                  {it.packageInfo && (
+                    <p className="mt-0.5 font-heb t-caption text-themeText2 opacity-80 truncate text-right">
+                      {it.packageInfo}
+                    </p>
+                  )}
                 </div>
 
-                {/* Bottom line: price (right) · light outline stepper (left) */}
-                <div className="flex items-center justify-between gap-2">
-                  <p className="font-heb t-body font-bold text-themeText">
-                    {it.price != null ? formatPrice(it.price * it.quantity) : "—"}
-                  </p>
-                  <div
-                    className="inline-flex items-center h-7 rounded-full border border-themeBorder shrink-0"
-                    role="group"
-                    aria-label={`כמות: ${it.name}`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => decrement(it.productId)}
-                      aria-label="הפחתת כמות"
-                      className="w-7 h-7 flex items-center justify-center text-themeText2 transition-colors hover:text-themeText"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
-                        <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                    <span
-                      aria-live="polite"
-                      className="w-5 text-center font-heb font-medium text-[13px] leading-none text-themeText"
-                    >
-                      {it.quantity}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => increment(it.productId)}
-                      aria-label="הוספת כמות"
-                      className="w-7 h-7 flex items-center justify-center text-themeText2 transition-colors hover:text-themeText"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
-                        <path d="M7 3v8M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+                {/* PRICE — the row's focal point */}
+                <p dir="ltr" className="font-heb font-bold text-[21px] leading-none text-themeText text-right">
+                  {it.price != null ? formatPriceShekelFirst(it.price * it.quantity) : "—"}
+                </p>
+              </div>
+
+              {/* Controls — far-left group (LAST child = flush to the drawer's
+                  left edge in RTL). Count circle and trash sit side by side,
+                  vertically centred on the same line (trash is the last child →
+                  physical far-left). */}
+              <div className="shrink-0 self-center flex items-center gap-1">
+                {/* Same control as the home cards (qty ≥ 1 → rests as the count
+                    circle; outline style here). Expands rightward so it never
+                    overflows the left edge. */}
+                <AddControl
+                  quantity={it.quantity}
+                  label={it.name}
+                  onAdd={() => {}}
+                  onIncrement={() => increment(it.productId)}
+                  onDecrement={() => decrement(it.productId)}
+                  expand="right"
+                  outlineCount
+                />
+                <button
+                  type="button"
+                  onClick={() => remove(it.productId)}
+                  aria-label={`הסרת ${it.name} מהעגלה`}
+                  className="shrink-0 w-6 h-6 inline-flex items-center justify-center text-themeText2 opacity-70 transition hover:opacity-100 hover:text-danger"
+                >
+                  <TrashIcon size={15} />
+                </button>
               </div>
             </li>
           ))}
@@ -239,7 +290,9 @@ export function CartContents({
               if (nameError) setNameError(null);
             }}
             placeholder="איך קוראים לך?"
-            className="w-full h-12 px-4 bg-themeBg border rounded-input font-heb t-body text-right text-themeText placeholder:text-themeText2 border-themeBorder aria-[invalid=true]:border-danger"
+            className={`w-full h-12 px-4 bg-themeBg border rounded-input font-heb t-body text-right text-themeText placeholder:text-themeText2 border-themeBorder aria-[invalid=true]:border-danger ${
+              nameFlash ? "name-flash" : ""
+            }`}
             aria-required="true"
             aria-invalid={!!nameError}
             aria-describedby={nameError ? `${nameId}-error` : undefined}
@@ -280,7 +333,7 @@ export function CartContents({
           className="w-full min-h-11 flex items-center justify-between gap-3 px-6 py-4 bg-themeBtn text-themeBtnText font-heb font-semibold text-[16px] rounded-wa transition hover:brightness-95 active:brightness-90 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100"
         >
           <span>{submitting ? "שולחת..." : "שליחת ההזמנה בוואטסאפ"}</span>
-          <span>{formatPrice(total)}</span>
+          <span dir="ltr">{formatPriceShekelFirst(total)}</span>
         </button>
       </div>
     </form>

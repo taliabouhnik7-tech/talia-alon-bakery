@@ -1,6 +1,5 @@
-// Shared trash/delete icon — used wherever "remove" is offered (quantity
-// stepper at qty 1, cart item remove) so the visual is consistent site-wide.
-// Stroke-based to match the +/- icon weight; inherits color via currentColor.
+// Shared trash/delete icon — a simple, rounded can: outer can shape + lid +
+// handle, with no internal vertical lines. Stroke-based; inherits currentColor.
 export function TrashIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <svg
@@ -12,7 +11,7 @@ export function TrashIcon({ size = 16, className }: { size?: number; className?:
       className={className}
     >
       <path
-        d="M4 7h16M9.5 7V5.2a1.2 1.2 0 0 1 1.2-1.2h2.6a1.2 1.2 0 0 1 1.2 1.2V7M6.5 7l.8 12.2a1.6 1.6 0 0 0 1.6 1.5h6.2a1.6 1.6 0 0 0 1.6-1.5L18.5 7M10 11v5.5M14 11v5.5"
+        d="M5 7h14M10 7V5.6A1.6 1.6 0 0 1 11.6 4h.8A1.6 1.6 0 0 1 14 5.6V7M7 7h10l-.7 10.6a2.4 2.4 0 0 1-2.4 2.2H10.1a2.4 2.4 0 0 1-2.4-2.2L7 7Z"
         stroke="currentColor"
         strokeWidth="1.7"
         strokeLinecap="round"

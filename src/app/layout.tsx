@@ -3,6 +3,7 @@ import { Assistant, Fredoka } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart";
 import { CartUiProvider } from "@/lib/cart-ui";
+import { AddControlExpansionProvider } from "@/lib/add-control-ui";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeStyle } from "@/components/ThemeStyle";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -51,8 +52,10 @@ export default function RootLayout({
         <ThemeStyle />
         <CartProvider>
           <CartUiProvider>
-            <div className="app-shell">{children}</div>
-            <CartDrawer />
+            <AddControlExpansionProvider>
+              <div className="app-shell">{children}</div>
+              <CartDrawer />
+            </AddControlExpansionProvider>
             <PageViewTracker />
           </CartUiProvider>
         </CartProvider>

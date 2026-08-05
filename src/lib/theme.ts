@@ -28,6 +28,27 @@ export const THEME_TOKENS: ThemeToken[] = [
   { key: "color.buttonBg", cssVar: "--c-btn", label: "רקע כפתור", group: "colors", default: "#D2E2EB" },
   { key: "color.buttonText", cssVar: "--c-btn-text", label: "טקסט כפתור", group: "colors", default: "#43302E" },
   { key: "color.border", cssVar: "--c-border", label: "מסגרת", group: "colors", default: "#D2E2EB" },
+  // Header stripe pattern — the strong and pale colors that alternate.
+  { key: "color.stripeStrong", cssVar: "--c-stripe-strong", label: "פס כותרת — צבע חזק", group: "colors", default: "#EBDA9A" },
+  { key: "color.stripePale", cssVar: "--c-stripe-pale", label: "פס כותרת — צבע בהיר", group: "colors", default: "#F7EEE6" },
+  // Category badge backgrounds (the chip color shown on product cards / cart).
+  { key: "color.badgeParve", cssVar: "--c-badge-parve", label: "תווית קטגוריה — פרווה", group: "colors", default: "#EBDA9A" },
+  { key: "color.badgeDairy", cssVar: "--c-badge-dairy", label: "תווית קטגוריה — חלבי", group: "colors", default: "#F7EEE6" },
+  // Add-to-cart control on product images: the idle "+" circle, and the
+  // collapsed "count only" circle (shown once an item is in the cart).
+  { key: "color.addIdleBg", cssVar: "--c-add-idle-bg", label: "כפתור הוספה — רקע", group: "colors", default: "#F7EEE6" },
+  { key: "color.addIdleIcon", cssVar: "--c-add-idle-icon", label: "כפתור הוספה — סמל", group: "colors", default: "#43302E" },
+  { key: "color.addCountBg", cssVar: "--c-add-count-bg", label: "מונה בסל — רקע", group: "colors", default: "#D2E2EB" },
+  { key: "color.addCountText", cssVar: "--c-add-count-text", label: "מונה בסל — טקסט", group: "colors", default: "#43302E" },
+  // The individual +/- circles inside the expanded stepper (distinct from the
+  // collapsed count circle's color).
+  { key: "color.addStepBtn", cssVar: "--c-add-step-btn", label: "כפתורי +/- — רקע", group: "colors", default: "#F7EEE6" },
+  // Cart-drawer count circle (outline style). Stroke = border at rest AND the
+  // fill color on hover; countText = the number inside.
+  { key: "color.countStroke", cssVar: "--c-count-stroke", label: "עיגול כמות (עגלה) — מסגרת + מילוי בריחוף", group: "colors", default: "#D2E2EB" },
+  { key: "color.countText", cssVar: "--c-count-text", label: "עיגול כמות (עגלה) — מספר", group: "colors", default: "#43302E" },
+  // Shared: the top-bar cart badge background AND the active category tab pill.
+  { key: "color.accentPill", cssVar: "--c-accent-pill", label: "רקע תג עגלה וטאב פעיל", group: "colors", default: "#FAF7F2" },
 
   // ---- Font sizes (px) ----
   { key: "fontSize.productName", cssVar: "--fs-product-name", label: "שם מוצר", group: "fontSizes", default: "14", unit: "px", min: 10, max: 32, step: 1 },
@@ -148,6 +169,13 @@ export function contrastChecks(values: Record<string, string>): ContrastCheck[] 
     { label: "טקסט ראשי על הרקע", fgKey: "color.textPrimary", bgKey: "color.background" },
     { label: "טקסט משני על הרקע", fgKey: "color.textSecondary", bgKey: "color.background" },
     { label: "טקסט כפתור על רקע הכפתור", fgKey: "color.buttonText", bgKey: "color.buttonBg" },
+    { label: "טקסט על תווית פרווה", fgKey: "color.textPrimary", bgKey: "color.badgeParve" },
+    { label: "טקסט על תווית חלבי", fgKey: "color.textPrimary", bgKey: "color.badgeDairy" },
+    { label: "סמל על כפתור הוספה", fgKey: "color.addIdleIcon", bgKey: "color.addIdleBg" },
+    { label: "טקסט על מונה בסל", fgKey: "color.addCountText", bgKey: "color.addCountBg" },
+    { label: "סמל על כפתורי +/-", fgKey: "color.addIdleIcon", bgKey: "color.addStepBtn" },
+    { label: "טקסט על תג/טאב פעיל", fgKey: "color.textPrimary", bgKey: "color.accentPill" },
+    { label: "מספר על עיגול כמות (בריחוף)", fgKey: "color.countText", bgKey: "color.countStroke" },
   ];
   return pairs.map((p) => {
     const fg = values[p.fgKey] ?? THEME_DEFAULTS[p.fgKey];

@@ -15,11 +15,20 @@ type Props = {
   products: Product[];
   bestsellerIds: string[];
   loadError?: boolean;
+  headerImageUrl?: string | null;
+  showInfoStrip?: boolean;
 };
 
 const BESTSELLER_SLUG = "bestseller";
 
-export function HomeClient({ categories, products, bestsellerIds, loadError = false }: Props) {
+export function HomeClient({
+  categories,
+  products,
+  bestsellerIds,
+  loadError = false,
+  headerImageUrl = null,
+  showInfoStrip = true,
+}: Props) {
   const productById = useMemo(() => new Map(products.map((p) => [p.id, p])), [products]);
   const catSlugById = useMemo(
     () => new Map(categories.map((c) => [c.id, c.slug])),
@@ -101,8 +110,8 @@ export function HomeClient({ categories, products, bestsellerIds, loadError = fa
     return (
       <>
         <TopBar />
-        <LogoHeader />
-        <InfoStrip />
+        <LogoHeader imageUrl={headerImageUrl} />
+        {showInfoStrip && <InfoStrip />}
         <main className="bg-themeBg p-6 min-h-[40vh] flex items-center justify-center">
           <p className="text-center text-themeText2 font-heb t-body max-w-xs">
             {loadError
@@ -118,8 +127,8 @@ export function HomeClient({ categories, products, bestsellerIds, loadError = fa
   return (
     <>
       <TopBar />
-      <LogoHeader />
-      <InfoStrip />
+      <LogoHeader imageUrl={headerImageUrl} />
+      {showInfoStrip && <InfoStrip />}
       <CategoryTabs tabs={tabs} activeSlug={activeSlug} onSelect={onSelect} />
 
       <main className="bg-themeBg" aria-live="polite">

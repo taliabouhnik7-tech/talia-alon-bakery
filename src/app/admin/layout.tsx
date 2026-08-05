@@ -39,6 +39,9 @@ export default async function AdminLayout({
               <Link href="/admin/theme" className="hover:underline">
                 עיצוב
               </Link>
+              <Link href="/admin/site" className="hover:underline">
+                אתר
+              </Link>
               <Link href="/" className="hover:underline text-gray-500">
                 לאתר ↗
               </Link>

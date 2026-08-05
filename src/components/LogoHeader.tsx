@@ -1,4 +1,32 @@
-export function LogoHeader() {
+type Props = {
+  // A custom header asset (raster or SVG) that replaces the ENTIRE default
+  // header (stripes + logo oval). When set, it IS the header.
+  imageUrl?: string | null;
+};
+
+export function LogoHeader({ imageUrl = null }: Props) {
+  // Custom uploaded header: the asset fills the same fixed-height band as the
+  // default header. object-cover keeps it full-bleed (no letterboxing) and never
+  // breaks layout; it may crop at the edges when the asset's aspect differs from
+  // the band (see /admin/site for the recommended dimensions). Plain <img> (not
+  // next/image) so both raster AND svg work without extra config.
+  if (imageUrl) {
+    return (
+      <section
+        className="relative bg-surface overflow-hidden h-[200px] lg:h-[440px]"
+        aria-label="לוגו"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageUrl}
+          alt="טליה אלון"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+      </section>
+    );
+  }
+
+  // Default header: striped background + logo oval (theme-token colors).
   return (
     <section
       className="relative bg-surface stripes-bg flex flex-col items-center justify-center overflow-hidden h-[200px] lg:h-[440px]"

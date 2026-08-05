@@ -55,7 +55,7 @@ export function TopBar() {
               <span
                 key={totalCount}
                 aria-hidden="true"
-                className="badge-pop absolute -top-2 -right-2 w-4 h-4 rounded-full bg-themeBg text-themeText text-[10px] leading-none font-bold flex items-center justify-center font-heb drop-shadow-[0px_1px_1px_rgba(0,0,0,0.1)]"
+                className="badge-pop absolute -top-2 -right-2 w-4 h-4 rounded-full bg-accentPill text-themeText text-[10px] leading-none font-bold flex items-center justify-center font-heb drop-shadow-[0px_1px_1px_rgba(0,0,0,0.1)]"
               >
                 {totalCount}
               </span>
