@@ -33,7 +33,7 @@ const config: Config = {
         badgeDairy: "var(--c-badge-dairy)",
         badgeText: "var(--c-badge-text)",
         addIdleBg: "var(--c-add-idle-bg)",
-        addIdleIcon: "var(--c-add-idle-icon)",
+        controlText: "var(--c-control-text)",
         addCountBg: "var(--c-add-count-bg)",
         addCountText: "var(--c-add-count-text)",
         addStepBtn: "var(--c-add-step-btn)",

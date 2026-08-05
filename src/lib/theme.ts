@@ -38,7 +38,9 @@ export const THEME_TOKENS: ThemeToken[] = [
   // Add-to-cart control on product images: the idle "+" circle, and the
   // collapsed "count only" circle (shown once an item is in the cart).
   { key: "color.addIdleBg", cssVar: "--c-add-idle-bg", label: "כפתור הוספה — רקע", group: "colors", default: "#F7EEE6" },
-  { key: "color.addIdleIcon", cssVar: "--c-add-idle-icon", label: "כפתור הוספה — סמל", group: "colors", default: "#43302E" },
+  // Shared: category-tab text AND the add-to-cart control's icon/number (idle "+"
+  // and the expanded +/- stepper).
+  { key: "color.controlText", cssVar: "--c-control-text", label: "טקסט טאבים וכפתור הוספה", group: "colors", default: "#43302E" },
   { key: "color.addCountBg", cssVar: "--c-add-count-bg", label: "מונה בסל — רקע", group: "colors", default: "#D2E2EB" },
   { key: "color.addCountText", cssVar: "--c-add-count-text", label: "מונה בסל — טקסט", group: "colors", default: "#43302E" },
   // The individual +/- circles inside the expanded stepper (distinct from the
@@ -178,9 +180,10 @@ export function contrastChecks(values: Record<string, string>): ContrastCheck[] 
     { label: "טקסט כפתור על רקע הכפתור", fgKey: "color.buttonText", bgKey: "color.buttonBg" },
     { label: "טקסט על תווית פרווה", fgKey: "color.badgeText", bgKey: "color.badgeParve" },
     { label: "טקסט על תווית חלבי", fgKey: "color.badgeText", bgKey: "color.badgeDairy" },
-    { label: "סמל על כפתור הוספה", fgKey: "color.addIdleIcon", bgKey: "color.addIdleBg" },
+    { label: "סמל על כפתור הוספה", fgKey: "color.controlText", bgKey: "color.addIdleBg" },
+    { label: "טקסט טאב על הסרגל", fgKey: "color.controlText", bgKey: "color.buttonBg" },
     { label: "טקסט על מונה בסל", fgKey: "color.addCountText", bgKey: "color.addCountBg" },
-    { label: "סמל על כפתורי +/-", fgKey: "color.addIdleIcon", bgKey: "color.addStepBtn" },
+    { label: "סמל על כפתורי +/-", fgKey: "color.controlText", bgKey: "color.addStepBtn" },
     { label: "טקסט על תג/טאב פעיל", fgKey: "color.textPrimary", bgKey: "color.accentPill" },
     { label: "מספר על עיגול כמות (בריחוף)", fgKey: "color.countText", bgKey: "color.countStroke" },
     { label: "טקסט על כפתור וואטסאפ", fgKey: "color.waBtnText", bgKey: "color.waBtnBg" },

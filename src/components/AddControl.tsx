@@ -82,7 +82,7 @@ export function AddControl({
           aria-label={`הוסף לסל: ${label}`}
           className="absolute inset-0 flex items-center justify-center"
         >
-          <span className="counter-pop w-9 h-9 rounded-full bg-addIdleBg text-addIdleIcon shadow-md flex items-center justify-center">
+          <span className="counter-pop w-9 h-9 rounded-full bg-addIdleBg text-controlText shadow-md flex items-center justify-center">
             <PlusIcon />
           </span>
         </button>
@@ -132,11 +132,11 @@ export function AddControl({
             onClick={onIncrement}
             onMouseDown={(e) => e.preventDefault()}
             aria-label="הוסף כמות"
-            className="w-8 h-8 rounded-full bg-addStepBtn text-addIdleIcon flex items-center justify-center shrink-0 transition hover:brightness-95 active:brightness-90"
+            className="w-8 h-8 rounded-full bg-addStepBtn text-controlText flex items-center justify-center shrink-0 transition hover:brightness-95 active:brightness-90"
           >
             <PlusIcon />
           </button>
-          <span className="min-w-5 text-center font-heb font-bold text-[14px] leading-none text-addIdleIcon">
+          <span className="min-w-5 text-center font-heb font-bold text-[14px] leading-none text-controlText">
             {quantity}
           </span>
           <button
@@ -144,7 +144,7 @@ export function AddControl({
             onClick={onDecrement}
             onMouseDown={(e) => e.preventDefault()}
             aria-label="הפחת כמות"
-            className="w-8 h-8 rounded-full bg-addStepBtn text-addIdleIcon flex items-center justify-center shrink-0 transition hover:brightness-95 active:brightness-90"
+            className="w-8 h-8 rounded-full bg-addStepBtn text-controlText flex items-center justify-center shrink-0 transition hover:brightness-95 active:brightness-90"
           >
             <MinusIcon />
           </button>
